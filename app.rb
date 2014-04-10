@@ -36,10 +36,20 @@ class GrabImages
   end
 
   def save_image(img, folder = nil)
-    folder = (folder ? "#{@folder}/#{folder}" : @folder)
-    open(folder ? "#{folder}/#{img}" : img, 'wb') do |file|
-      file << open("#{@uri}/#{img}").read unless File.exists?("#{folder}/#{img}")
+    if folder
+      remote_file = "#{@uri}#{folder}/#{img}"
+      folder = "#{@folder}/#{folder}"
+    else
+      remote_file = "#{@uri}#{img}"
+      folder = @folder
     end
+
+    # Take it easy so we don't hit the server too hard:
+    sleep(1)
+    open("#{folder}/#{img}", 'wb') do |file|
+      file << open(remote_file).read
+    end
+
     puts('File saved: '.fg('#00ff00') + "#{img} in /#{folder.fg('#71b9f8')}")
   end
 

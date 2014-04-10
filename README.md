@@ -9,3 +9,6 @@ To use it, clone the repo and run:
 ```bash
 ruby app.rb [url]
 ```
+
+Use with caution, this will recursively visit all the folders in the
+site (at least until something blows up).
