@@ -1,6 +1,6 @@
 # Image grabber
 
-For downloading images from htlm indexes such as
+Tool for downloading images from old html indexes such as
 http://isis.bibna.gub.uy/imagenes/
 
 Prototype project, **Work in progress**

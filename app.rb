@@ -15,7 +15,7 @@ class GrabImages
       open(uri) do |f|
         f.each_line do |t|
           # Check for image
-          if match = t.match(/href=\"([\w\d_]*\.(jpg|jpeg|png|gif|bmp))\"/)
+          if match = t.match(/href=\"([\w\d_\-\.]*\.(jpg|jpeg|png|gif|bmp))\"/)
             save_image(match[1], folder)
           end
 
@@ -43,14 +43,16 @@ class GrabImages
       remote_file = "#{@uri}#{img}"
       folder = @folder
     end
+    local_file = "#{folder}/#{img}"
+    unless File.exists?(local_file) and File.size(local_file) > 0
+      # Take it easy so we don't hit the server too hard:
+      sleep(1)
+      open(local_file, 'wb') do |file|
+        file << open(remote_file).read
+      end
 
-    # Take it easy so we don't hit the server too hard:
-    sleep(1)
-    open("#{folder}/#{img}", 'wb') do |file|
-      file << open(remote_file).read
+      puts('File saved: '.fg('#00ff00') + "#{img} in /#{folder.fg('#71b9f8')}")
     end
-
-    puts('File saved: '.fg('#00ff00') + "#{img} in /#{folder.fg('#71b9f8')}")
   end
 
   def change_folder(folder)
